@@ -44,6 +44,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.StreamSupport;
 
 public class CurrentGameFragment extends Fragment {
 
@@ -650,18 +651,23 @@ public class CurrentGameFragment extends Fragment {
     }
 
     public void refreshUi(Question question) {
-        binding.currentQuestionText.setText(question.getQuestionText());
-        binding.quizTitle.setText(currentGame.getTitle());
-        Picasso.get()
-                .load(question.getPhotoUrl())
-                .into(binding.imageView);
-        binding.answer1Tw.setText(question.getAnswerOne().keySet().toArray()[0].toString());
-        binding.answer2Tw.setText(question.getAnswerTwo().keySet().toArray()[0].toString());
-        binding.answer3Tw.setText(question.getAnswerThree().keySet().toArray()[0].toString());
-        binding.answer4Tw.setText(question.getAnswerFour().keySet().toArray()[0].toString());
-        binding.timestamp.setText(getResources().getString(R.string.ostalos) + " " + timeLeft);
+        try {
+            binding.currentQuestionText.setText(question.getQuestionText());
+            binding.quizTitle.setText(currentGame.getTitle());
+            Picasso.get()
+                    .load(question.getPhotoUrl())
+                    .into(binding.imageView);
+            binding.answer1Tw.setText(question.getAnswerOne().keySet().toArray()[0].toString());
+            binding.answer2Tw.setText(question.getAnswerTwo().keySet().toArray()[0].toString());
+            binding.answer3Tw.setText(question.getAnswerThree().keySet().toArray()[0].toString());
+            binding.answer4Tw.setText(question.getAnswerFour().keySet().toArray()[0].toString());
+            binding.timestamp.setText(getResources().getString(R.string.ostalos) + " " + timeLeft);
 
-        binding.currentQuestionNum.setText(question.getId() + " " + getResources().getString(R.string.of) + " " + questions.size());
+            binding.currentQuestionNum.setText(question.getId() + " " + getResources().getString(R.string.of) + " " + questions.size());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
     }
 
     //обавляет вопросы в массив
@@ -672,10 +678,30 @@ public class CurrentGameFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 questions.clear();
+
+                long qsize = StreamSupport.stream(snapshot.getChildren().spliterator(), false).count();
+
+
+                //for (int i = 0; i < qsize; i++) {
+                //    Question question = new Question();
+                //    questions.add(question);
+                //}
+
+                //Toast.makeText(getContext(), qsize+ "", Toast.LENGTH_SHORT).show();
+                HashMap<Integer, Question> qsorted = new HashMap<>();
+
+
                 for (DataSnapshot data : snapshot.getChildren()) {
                     Question question = data.getValue(Question.class);
-                    questions.add(Integer.parseInt(question.getId())-1, question);
+                    qsorted.put(Integer.parseInt(question.getId()), question);
                 }
+
+                for (int i = 1; i <= qsize; i++) {
+
+                    questions.add(qsorted.get(i));
+                    System.out.println(qsorted.get(i).getId());
+                }
+
 
                 //сделал таймер который будет обновляться каждую секунду поэтому закомментил тут
                 /**
@@ -701,14 +727,19 @@ public class CurrentGameFragment extends Fragment {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.getValue() == null) {
-                    ref.setValue(timestamp);
-                    timeLeft = currentQuestion.getSeconds();
-                    ref.removeEventListener(this);
-                } else {
-                    timeLeft = Long.parseLong(snapshot.getValue().toString()) + currentQuestion.getSeconds() - System.currentTimeMillis()/1000;
-                    ref.removeEventListener(this);
+                try {
+                    if (snapshot.getValue() == null) {
+                        ref.setValue(timestamp);
+                        timeLeft = currentQuestion.getSeconds();
+                        ref.removeEventListener(this);
+                    } else {
+                        timeLeft = Long.parseLong(snapshot.getValue().toString()) + currentQuestion.getSeconds() - System.currentTimeMillis()/1000;
+                        ref.removeEventListener(this);
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
                 }
+
 
             }
 
