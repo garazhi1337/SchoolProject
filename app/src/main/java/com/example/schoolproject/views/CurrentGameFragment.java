@@ -681,13 +681,6 @@ public class CurrentGameFragment extends Fragment {
 
                 long qsize = StreamSupport.stream(snapshot.getChildren().spliterator(), false).count();
 
-
-                //for (int i = 0; i < qsize; i++) {
-                //    Question question = new Question();
-                //    questions.add(question);
-                //}
-
-                //Toast.makeText(getContext(), qsize+ "", Toast.LENGTH_SHORT).show();
                 HashMap<Integer, Question> qsorted = new HashMap<>();
 
 
