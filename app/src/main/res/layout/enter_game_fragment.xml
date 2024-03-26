@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/salatowy">
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="15dp"
+        android:background="@drawable/shape2"
+        android:layout_margin="10dp"
+        android:id="@+id/layout">
+
+
+
+        <EditText
+            android:id="@+id/enter_pin"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/shape_1"
+            android:hint="@string/enterpin"
+            android:textAlignment="center"></EditText>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:background="@drawable/volumablebtn"
+            android:id="@+id/enterGameBtn"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/enter_pin"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/enter"
+            android:textAllCaps="false"></androidx.appcompat.widget.AppCompatButton>
+    </RelativeLayout>
+
+    <ProgressBar
+        android:visibility="invisible"
+        android:indeterminateDrawable="@drawable/progressbat"
+        android:id="@+id/progress_circular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/layout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ProgressBar>
+</androidx.constraintlayout.widget.ConstraintLayout>

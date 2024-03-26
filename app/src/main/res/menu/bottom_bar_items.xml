@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/create_game"
+        android:title="@string/creategame"
+        android:icon="@drawable/creategame" />
+    <item android:id="@+id/entergame"
+        android:title="@string/enter_game"
+        android:icon="@drawable/entergame" />
+    <item android:id="@+id/mygames"
+        android:title="@string/mygames"
+        android:icon="@drawable/database" />
+    <item android:id="@+id/mycompgames"
+        android:title="@string/myfinishedgames"
+        android:icon="@drawable/pngwing_com" />
+</menu>
