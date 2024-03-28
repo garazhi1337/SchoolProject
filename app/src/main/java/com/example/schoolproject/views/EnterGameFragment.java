@@ -55,35 +55,40 @@ public class EnterGameFragment extends Fragment {
                     ref.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                            Game game = snapshot.getValue(Game.class);
-                            if (game.getPin().equals(binding.enterPin.getText().toString().trim())
-                                    && game.getStarted() == false && !MainActivity.currentUser.getUsername().equals(game.getAuthor())) {
-                                DatabaseReference ref2 = FirebaseDatabase.getInstance(MainActivity.DATABASE_PATH)
-                                        .getReference("/games/" + game.getPin() + "/players/" + MainActivity.currentUser.getUsername() + "/");
-                                ref2.setValue(MainActivity.currentUser)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                binding.progressCircular.setVisibility(View.INVISIBLE);
-                                                FragmentManager fm = getActivity().getSupportFragmentManager();
-                                                FragmentTransaction ft = fm.beginTransaction();
-                                                ft.replace(R.id.nav_host_fragment, new CurrentGameFragment());
-                                                ft.addToBackStack(null);
-                                                ft.commit();
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                binding.progressCircular.setVisibility(View.INVISIBLE);
-                                                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                            } else {
-                                binding.progressCircular.setVisibility(View.INVISIBLE);
-                                Toast.makeText(getContext(), getResources().getString(R.string.cantaccess), Toast.LENGTH_SHORT).show();
-                                System.out.println(game.getPin() + " " + binding.enterPin.getText() + " " + game.getStarted() + " " + !MainActivity.currentUser.getUsername().equals(game.getAuthor()));
+                            try {
+                                Game game = snapshot.getValue(Game.class);
+                                if (game.getPin().equals(binding.enterPin.getText().toString().trim())
+                                        && game.getStarted() == false && !MainActivity.currentUser.getUsername().equals(game.getAuthor())) {
+                                    DatabaseReference ref2 = FirebaseDatabase.getInstance(MainActivity.DATABASE_PATH)
+                                            .getReference("/games/" + game.getPin() + "/players/" + MainActivity.currentUser.getUsername() + "/");
+                                    ref2.setValue(MainActivity.currentUser)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    binding.progressCircular.setVisibility(View.INVISIBLE);
+                                                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                                                    FragmentTransaction ft = fm.beginTransaction();
+                                                    ft.replace(R.id.nav_host_fragment, new CurrentGameFragment());
+                                                    ft.addToBackStack(null);
+                                                    ft.commit();
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    binding.progressCircular.setVisibility(View.INVISIBLE);
+                                                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                } else {
+                                    binding.progressCircular.setVisibility(View.INVISIBLE);
+                                    Toast.makeText(getContext(), getResources().getString(R.string.cantaccess), Toast.LENGTH_SHORT).show();
+                                    System.out.println(game.getPin() + " " + binding.enterPin.getText() + " " + game.getStarted() + " " + !MainActivity.currentUser.getUsername().equals(game.getAuthor()));
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
+
                         }
 
                         @Override
