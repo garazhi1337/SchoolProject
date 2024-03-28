@@ -604,9 +604,11 @@ public class CurrentGameFragment extends Fragment {
                             refreshUi(currentQuestion);
                         }
 
-                    } else if (((answersCount != 0 && answersCount >= totalPlayers.size()) || (timeLeft <= 0)) && finalI < questions.size()) {
+                    } else if (((answersCount != 0 && answersCount >= totalPlayers.size()) || (timeLeft <= 0)) && (finalI < questions.size())) {
                         //тут переход на следующий вопрос
+
                         if ((currentQuestion != null) && (!currentQuestion.equals(questions.get(finalI)))) {
+                            Toast.makeText(getContext(), ""  + " " + finalI + " " + timeLeft + currentQuestion.getQuestionText(), Toast.LENGTH_SHORT).show();
                             timeLeft = 1337;
                             currentQuestion = questions.get(finalI);
                             setCurrentQuestionTimestamp(System.currentTimeMillis()/1000, game);
@@ -614,6 +616,7 @@ public class CurrentGameFragment extends Fragment {
                         }
 
                         currentQuestion = questions.get(finalI);
+                        refreshUi(currentQuestion);
 
                     } else if (((answersCount != 0 && answersCount >= totalPlayers.size()) || (timeLeft <= 0)) && finalI == questions.size()) {
                         currentQuestion = questions.get(questions.size()-1);
@@ -688,6 +691,7 @@ public class CurrentGameFragment extends Fragment {
                     Question question = data.getValue(Question.class);
                     qsorted.put(Integer.parseInt(question.getId()), question);
                 }
+
 
                 for (int i = 1; i <= qsize; i++) {
 
